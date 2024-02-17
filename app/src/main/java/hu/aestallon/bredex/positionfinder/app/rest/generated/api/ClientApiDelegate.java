@@ -32,6 +32,7 @@ public interface ClientApiDelegate {
      * @param clientCreationRequest  (required)
      * @return Ok (status code 201)
      *         or Bad Request (status code 400)
+     *         or Conflict - returned if a client with the provided name already exists. (status code 409)
      * @see ClientApi#createClient
      */
     default ResponseEntity<ClientCreationResponse> createClient(ClientCreationRequest clientCreationRequest) {

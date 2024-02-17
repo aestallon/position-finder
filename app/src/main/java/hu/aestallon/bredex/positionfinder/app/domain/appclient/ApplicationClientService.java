@@ -33,7 +33,7 @@ public class ApplicationClientService {
   @Transactional
   public ApplicationClient create(final String name, final String email) {
     if (applicationClientRepository.existsByName(name)) {
-      throw new IllegalArgumentException("Cannot create client: name taken!");
+      throw new ClientNameConflictException(name);
     }
 
     final var client = new ApplicationClient();

@@ -44,6 +44,7 @@ public interface ClientApi {
      * @param clientCreationRequest  (required)
      * @return Ok (status code 201)
      *         or Bad Request (status code 400)
+     *         or Conflict - returned if a client with the provided name already exists. (status code 409)
      */
     @Operation(
         operationId = "createClient",
@@ -54,6 +55,9 @@ public interface ClientApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ClientCreationResponse.class))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "Conflict - returned if a client with the provided name already exists.", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             })
         }

@@ -44,6 +44,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict - returned if a client with the provided name already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
   # Position related endpoints:
   /position:
