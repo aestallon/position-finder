@@ -1,3 +1,4 @@
 rootProject.name = 'position-finder'
 include 'app'
+include 'vue'
 
