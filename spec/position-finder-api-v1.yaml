@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: Position Finder API
+  description: |
+    ...
+  version: 1.0.0
+  contact:
+    name: Szabolcs Bazil Papp
+    email: papp.szabolcs.bazil@gmail.com
+servers:
+  - url: 'http://localhost:8080/api/v1'
+tags:
+  - name: Client
+    description: Endpoints pertaining to client registration and API key acquisition
+  - name: Position
+    description: Endpoints concerning position creation, inspection and querying
+paths:
+  # Client 'registration' related endpoints:
+  /client:
+    post:
+      summary: Registers a client to acquire an API key.
+      description: |
+        Unsecured endpoint that enables 'registering' a client with this API, returning an key,
+        which is valid until revocation.
+      tags:
+        - Client
+      operationId: createClient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreationRequest'
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientCreationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  # Position related endpoints:
+  /position:
+    post:
+      summary: Creates a new position.
+      description: Creates a new position.
+      tags:
+        - Position
+      operationId: createPosition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Position'
+      security:
+        - ApiKeyAuthorization: [ ]
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /position/search:
+    get:
+      summary: Searches for matching positions
+      description: |
+        Search all persisted positions to find the ones with matching name/location. The search
+        parameters are to be supplied in the query fragment of the URL. The operation returns a list
+        of URLS (relative to the host of this API), on which the found positions can be inspected.
+      tags:
+        - Position
+      operationId: searchPosition
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: location
+          schema:
+            type: string
+          required: false
+      security:
+        - ApiKeyAuthorization: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionSearchResult'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /position/{id}:
+    get:
+      summary: Fetches a position.
+      description: |
+        Attempts to return a position by the denoted identifier.
+      tags:
+        - Position
+      operationId: getPosition
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      security:
+        - ApiKeyAuthorization: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+components:
+  schemas:
+    # Client creation:
+    ClientCreationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 100
+          example: Client-001
+          description: |
+            The unique name of this client.
+        email:
+          type: string
+          minLength: 3
+          maxLength: 100
+          example: user@domain
+          description: |
+            A valid e-mail address
+      required: [ name, email ]
+
+    ClientCreationResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          format: uuid
+          description: |
+            The API key with which this application's endpoints may be interacted with.
+      required: [ uuid ]
+
+    # Position related:
+    Position:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Accountant
+          description: |
+            The name of the occupation.
+        location:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Budapest
+          description: |
+            Freeform location of the position.
+      required: [ name, location ]
+
+    PositionSearchResult:
+      type: object
+      description: |
+        The object returned after a query is performed. Contained URLs are to be interpreted to be
+        relative to the API host.
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+            format: url
+
+    # Error handling while interacting with the API:
+    ApiError:
+      type: object
+      description: |
+        Generic response the API answers with, when it cannot return a 2xx status response.
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 400
+          default: -1
+          description: |
+            The HTTP status code is provided here for the sake of convenience.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorElement'
+      required: [ status, errors ]
+
+    ApiErrorElement:
+      type: object
+      description: |
+        Describes an individual error that was encountered while interpreting or processing the
+        request and its payload.
+      properties:
+        fieldName:
+          type: string
+          description: |
+            The name of the exact element pertaining to this error.
+        code:
+          type: string
+          description: |
+            A short standardised code of the kind of error encountered.
+        message:
+          type: string
+          description: |
+            Human readable message describing the error.
+      required: [ fieldName, code, message ]
+
+  securitySchemes:
+    ApiKeyAuthorization:
+      type: apiKey
+      in: header
+      name: X-Aest-Token
