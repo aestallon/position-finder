@@ -73,3 +73,27 @@ openApiGenerate {
     "RFC3339DateFormat.java"
   ]
 }
+
+tasks.named("jar") {
+  enabled = false
+}
+
+def processFrontendResourcesTask = 'processFrontendResources'
+
+tasks.register(processFrontendResourcesTask, Copy) {
+  def frontendBuildDir = file("${project(':vue').buildDir}/../dist")
+  def appResourcesDir = file("${project.buildDir}/resources/main/static")
+
+  group 'frontend'
+  description 'process frontend resources'
+  dependsOn project(':vue').tasks.named('assembleFrontend')
+
+  println "copying frontend resources from [ $frontendBuildDir ] to [ $appResourcesDir ]"
+
+  from frontendBuildDir
+  into appResourcesDir
+}
+
+tasks.named('processResources') {
+  dependsOn tasks.named(processFrontendResourcesTask)
+}

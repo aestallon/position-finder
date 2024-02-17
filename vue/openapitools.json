@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.6.0",
+    "generators": {
+      "pfinder-api": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "../spec/position-finder-api-v1.yaml",
+        "output": "src/api/pfinder"
+      }
+    }
+  }
+}

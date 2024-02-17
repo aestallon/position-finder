@@ -65,6 +65,18 @@ public class PositionFinderSecurityConfig {
                 new AntPathRequestMatcher("/api/v1/client"), // the only unprotected API-endpoint
                 new AntPathRequestMatcher("/ui/**")) // where the public Vue client is served
             .permitAll()
+            .antMatchers(
+                "/",
+                "/favicon.ico", // static stuff for the Vue client
+                "/favicon.png",
+                "/styles.css.map",
+                "/polyfills.js.map",
+                "/runtime.js.map",
+                "/vendor.js.map",
+                "/main.js.map",
+                "/index.html",
+                "/assets/**")
+            .permitAll()
             .anyRequest()
             .authenticated())
         .formLogin(FormLoginConfigurer::disable)
