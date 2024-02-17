@@ -91,7 +91,7 @@ public class PositionApiDelegateImpl implements PositionApiDelegate {
                                                              Optional<String> location) {
     return jobPositionService.searchPositions(name.orElse(""), location.orElse("")).stream()
         .map(JobPosition::id)
-        .map(id -> apiPath + id)
+        .map(id -> apiPath + '/' + id)
         .collect(collectingAndThen(
             toList(),
             urls -> ResponseEntity.ok(new PositionSearchResult().urls(urls))));

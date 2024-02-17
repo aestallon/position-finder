@@ -34,10 +34,10 @@ export default defineConfig({
     }),
   ],
   define: { 'process.env': {} },
-  build: {
-    emptyOutDir: true,
-    outDir: '../app/src/main/resources/static',
-  },
+  //build: {
+ //  emptyOutDir: true,
+ //  outDir: '../app/src/main/resources/static',
+ //},
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

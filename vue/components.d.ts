@@ -7,7 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    ApplicationClient: typeof import('./src/components/ApplicationClient.vue')['default']
+    CreateClient: typeof import('./src/components/CreateClient.vue')['default']
+    CreatePosition: typeof import('./src/components/CreatePosition.vue')['default']
+    PositionSearch: typeof import('./src/components/PositionSearch.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
