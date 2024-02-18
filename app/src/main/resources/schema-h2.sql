@@ -14,11 +14,11 @@
 drop all objects;
 create table if not exists app_client
 (
-    id           serial      not null primary key,
-    client_name  varchar(50) not null default '',
-    client_email varchar(50) not null default '',
-    api_key      uuid        not null,
-    created_at   timestamp   not null default now()
+    id           serial       not null primary key,
+    client_name  varchar(100) not null default '',
+    client_email varchar(100) not null default '',
+    api_key      uuid         not null,
+    created_at   timestamp    not null default now()
 );
 
 create unique index if not exists client_name_idx on app_client (client_name);
@@ -26,8 +26,8 @@ create unique index if not exists api_key_idx on app_client (api_key);
 
 create table if not exists job_position
 (
-    id           serial    not null primary key,
-    pos_name     text      not null default '',
-    pos_location text      not null default '',
-    created_at   timestamp not null default now()
+    id           serial      not null primary key,
+    pos_name     varchar(50) not null default '',
+    pos_location varchar(50) not null default '',
+    created_at   timestamp   not null default now()
 );

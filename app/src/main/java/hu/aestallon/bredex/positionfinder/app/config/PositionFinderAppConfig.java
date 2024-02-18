@@ -13,22 +13,21 @@
 
 package hu.aestallon.bredex.positionfinder.app.config;
 
-import javax.sql.DataSource;
-import org.springframework.boot.test.context.TestConfiguration;
+import java.nio.charset.StandardCharsets;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
-@TestConfiguration
-public class IntegrationTestConfig {
+@Configuration
+public class PositionFinderAppConfig {
 
   @Bean
-  DataSource dataSource() {
-    final var dataSource = new DriverManagerDataSource(
-        "jdbc:h2:mem:test-db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;",
-        "sa",
-        "sa");
-    dataSource.setDriverClassName("org.h2.Driver");
-    return dataSource;
+  MessageSource messageSource() {
+    final var msgSource = new ReloadableResourceBundleMessageSource();
+    msgSource.setBasename("classpath:messages");
+    msgSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+    return msgSource;
   }
 
 }

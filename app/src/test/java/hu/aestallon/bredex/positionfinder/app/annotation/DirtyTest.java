@@ -11,16 +11,21 @@
  * limitations under the License.
  */
 
-package hu.aestallon.bredex.positionfinder.app.rest.validation;
+package hu.aestallon.bredex.positionfinder.app.annotation;
 
-import java.util.List;
-import java.util.Locale;
-import hu.aestallon.bredex.positionfinder.app.rest.generated.model.ApiErrorElement;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.DirtiesContext;
 
-public interface ValidationService<T> {
-
-  Locale LOCALE_EN = Locale.ENGLISH;
-
-  List<ApiErrorElement> validate(T t);
-
-}
+@Test
+@DirtiesContext
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+public @interface DirtyTest {}
