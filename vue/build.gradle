@@ -1,0 +1,9 @@
+plugins {
+  id 'org.siouan.frontend-jdk8' version '6.0.0'
+}
+
+frontend {
+  nodeDistributionProvided = true
+  nodeVersion = '20.11.1'
+  assembleScript = 'run build'
+}

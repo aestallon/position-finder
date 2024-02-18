@@ -1,0 +1,23 @@
+@startuml
+title "Request Authorization Flow"
+(*) -> "Request Arrives"
+
+"Request Arrives" --> if "Targets '/'" then
+  -->[true] "Serve Public VueJS Client"
+  else
+    if "Targets /api/v1/client using method POST" then
+      -right->[true] "Create New API Key"
+    else
+      if "Targets existing resource" then
+          if "Carries Valid API Key" then
+            -->[true] "Serve Resource"
+          else
+            -->[false] "Return ApiError with Unauthorized Status"
+          endif
+      else
+        -->[false] "Return ApiError with NotFound Status"
+      endif
+    endif
+endif
+
+@enduml

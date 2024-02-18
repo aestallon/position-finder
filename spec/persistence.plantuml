@@ -1,0 +1,23 @@
+@@startuml
+title "Persisted Entities"
+
+skinparam linetype ortho
+
+entity "app_client" as e01 {
+    *id : integer <<generated>>
+    --
+    *client_name : varchar(100)
+    *client_email : varchar(100)
+    *api_key : uuid
+    *created_at : timestamp
+}
+
+entity "job_position" as e02 {
+    *id : integer <<generated>>
+    --
+    *pos_name : varchar(50)
+    *pos_location : varchar(50)
+    *created_at : timestamp
+}
+
+@@enduml
