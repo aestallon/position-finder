@@ -17,6 +17,8 @@
 package hu.aestallon.bredex.positionfinder.app.rest.impl;
 
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,8 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 public class PositionApiDelegateImpl implements PositionApiDelegate {
+
+  private static final Logger log = LoggerFactory.getLogger(PositionApiDelegateImpl.class);
 
   private static Position asDto(final JobPosition jobPosition) {
     return new Position()
@@ -65,14 +69,19 @@ public class PositionApiDelegateImpl implements PositionApiDelegate {
 
   @Override
   public ResponseEntity<Position> createPosition(Position position) {
+    log.debug("createPosition({})...", position);
+
     final var errors = positionValidationService.validate(position);
     if (!errors.isEmpty()) {
+      log.debug("createPosition - validation returned errors: {}", errors);
       throw new InvalidApiObjectException(errors);
     }
 
     final JobPosition domainPosition = jobPositionService.createPosition(
         position.getName(),
         position.getLocation());
+    log.debug("createPosition - created new position: {}", domainPosition);
+
     return new ResponseEntity<>(asDto(domainPosition), HttpStatus.CREATED);
   }
 

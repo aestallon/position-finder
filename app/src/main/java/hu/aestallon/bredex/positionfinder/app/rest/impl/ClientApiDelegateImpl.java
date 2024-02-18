@@ -16,6 +16,8 @@
 
 package hu.aestallon.bredex.positionfinder.app.rest.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,20 +34,27 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClientApiDelegateImpl implements ClientApiDelegate {
 
+  private static final Logger log = LoggerFactory.getLogger(ClientApiDelegateImpl.class);
+
   private final ClientCreationRequestValidationService validationService;
   private final ApplicationClientService applicationClientService;
 
   @Override
   public ResponseEntity<ClientCreationResponse> createClient(
       ClientCreationRequest clientCreationRequest) {
+    log.debug("createClient({})...", clientCreationRequest);
+
     final var errors = validationService.validate(clientCreationRequest);
     if (!errors.isEmpty()) {
+      log.debug("createClient - validation returned errors: {}", errors);
       throw new InvalidApiObjectException(errors);
     }
 
     final ApplicationClient applicationClient = applicationClientService.create(
         clientCreationRequest.getName(),
         clientCreationRequest.getEmail());
+    log.debug("createClient - created new client: {}", applicationClient);
+
     return new ResponseEntity<>(
         new ClientCreationResponse().apiKey(applicationClient.getUuid()),
         HttpStatus.CREATED);
