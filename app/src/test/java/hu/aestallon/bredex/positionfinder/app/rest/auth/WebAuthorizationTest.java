@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import hu.aestallon.bredex.positionfinder.app.config.IntegrationTestConfig;
+import hu.aestallon.bredex.positionfinder.app.config.WebAuthorizationTestConfig;
 import hu.aestallon.bredex.positionfinder.app.rest.generated.model.ClientCreationRequest;
 import hu.aestallon.bredex.positionfinder.app.rest.generated.model.ClientCreationResponse;
 import hu.aestallon.bredex.positionfinder.app.rest.generated.model.Position;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootApplication
 @SpringBootTest(
-    classes = IntegrationTestConfig.class,
+    classes = WebAuthorizationTestConfig.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

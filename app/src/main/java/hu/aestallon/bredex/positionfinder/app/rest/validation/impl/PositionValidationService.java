@@ -37,9 +37,9 @@ public class PositionValidationService implements ValidationService<Position> {
 
     final String location = position.getLocation();
     if (Strings.isNullOrEmpty(location)) {
-      errors.add(new ApiErrorElement().fieldName("name").code("empty").message(""));
+      errors.add(new ApiErrorElement().fieldName("location").code("empty").message(""));
     } else if (location.length() > 50) {
-      errors.add(new ApiErrorElement().fieldName("name").code("length.exceeded").message(""));
+      errors.add(new ApiErrorElement().fieldName("location").code("length.exceeded").message(""));
     }
 
     return errors;
