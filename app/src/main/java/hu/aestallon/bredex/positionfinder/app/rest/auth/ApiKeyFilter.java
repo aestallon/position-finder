@@ -25,26 +25,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import hu.aestallon.bredex.positionfinder.app.domain.appclient.ApplicationClientService;
-import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class ApiKeyFilter extends OncePerRequestFilter {
 
   private static final Logger log = LoggerFactory.getLogger(ApiKeyFilter.class);
 
+  private final String apiKeyHeader;
   private final ApplicationClientService applicationClientService;
 
+  public ApiKeyFilter(@Value("${position-finder.api-key.header:X-Aest-Token}") String apiKeyHeader,
+                      ApplicationClientService applicationClientService) {
+    this.apiKeyHeader = apiKeyHeader;
+    this.applicationClientService = applicationClientService;
+  }
+
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                  FilterChain filterChain) throws ServletException, IOException {
-    final String apiKeyStr = request.getHeader("X-Aest-Token");
+  protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
+                                  @NonNull FilterChain filterChain)
+      throws ServletException, IOException {
+
+    final String apiKeyStr = request.getHeader(apiKeyHeader);
     final UUID apiKey;
     try {
       apiKey = UUID.fromString(apiKeyStr);
