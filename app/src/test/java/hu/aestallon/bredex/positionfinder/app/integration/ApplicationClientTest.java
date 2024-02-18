@@ -13,23 +13,11 @@
 
 package hu.aestallon.bredex.positionfinder.app.integration;
 
-import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import hu.aestallon.bredex.positionfinder.app.annotation.DirtyTest;
 import hu.aestallon.bredex.positionfinder.app.annotation.IntegrationTest;
-import hu.aestallon.bredex.positionfinder.app.config.IntegrationTestConfig;
-import hu.aestallon.bredex.positionfinder.app.config.db.H2DatabaseConfig;
 import hu.aestallon.bredex.positionfinder.app.domain.appclient.ApplicationClientService;
 import hu.aestallon.bredex.positionfinder.app.domain.appclient.ClientNameConflictException;
 import hu.aestallon.bredex.positionfinder.app.rest.generated.model.ApiErrorElement;
