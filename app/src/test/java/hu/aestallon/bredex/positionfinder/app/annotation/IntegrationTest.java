@@ -26,12 +26,14 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import hu.aestallon.bredex.positionfinder.app.config.IntegrationTestConfig;
+import hu.aestallon.bredex.positionfinder.app.config.PositionFinderAppConfig;
 import hu.aestallon.bredex.positionfinder.app.config.db.H2DatabaseConfig;
 
 
 @SpringBootTest(
     classes = {
         H2DatabaseConfig.class,
+        PositionFinderAppConfig.class,
         IntegrationTestConfig.class
     })
 @ComponentScan(

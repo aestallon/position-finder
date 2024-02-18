@@ -14,9 +14,12 @@
 package hu.aestallon.bredex.positionfinder.app.rest.validation;
 
 import java.util.List;
+import java.util.Locale;
 import hu.aestallon.bredex.positionfinder.app.rest.generated.model.ApiErrorElement;
 
 public interface ValidationService<T> {
+
+  Locale LOCALE_EN = Locale.ENGLISH;
 
   List<ApiErrorElement> validate(T t);
 
